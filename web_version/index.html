@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>火车游戏网页版</title>
+    <script src="https://cdn.jsdelivr.net/pyodide/v0.23.4/full/pyodide.js"></script>
+    <style>
+        #gameCanvas {
+            border: 2px solid black;
+            background-color: darkgreen;
+        }
+        body {
+            display: flex;
+            justify-content: center;
+            font-family: Arial;
+        }
+    </style>
+</head>
+<body>
+    <div>
+        <h1>Jerry's 火车游戏 (网页版)</h1>
+        <canvas id="gameCanvas" width="800" height="400"></canvas>
+        <div id="controls">
+            <button id="startBtn">开始/暂停</button>
+            <button id="announceBtn">报站</button>
+        </div>
+    </div>
+
+    <script type="module">
+        // 初始化Pyodide
+        async function main() {
+            let pyodide = await loadPyodide({
+                indexURL: "https://cdn.jsdelivr.net/pyodide/v0.23.4/full/"
+            });
+
+            // 加载Python代码
+            await pyodide.loadPackage(["pygame"]);  // 注意：网页版pygame功能有限
+            const response = await fetch("game_web.py");
+            const code = await response.text();
+            await pyodide.runPythonAsync(code);
+        }
+        main();
+    </script>
+</body>
+</html>
